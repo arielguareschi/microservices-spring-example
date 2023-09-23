@@ -1,15 +1,19 @@
 package br.com.ariel.orderservice.dto;
 
+
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderRequest {
+@Builder
+public class InventoryResponse {
 
-    private List<OrderLineItemsDto> orderLineItemsDtoList;
+    private String skuCode;
+    private boolean isInStock;
+
+
 }

@@ -1,10 +1,13 @@
 package br.com.ariel.inventoryservice.controller;
 
 
+import br.com.ariel.inventoryservice.dto.InventoryResponse;
 import br.com.ariel.inventoryservice.service.InventoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -16,7 +19,7 @@ public class InventoryController {
 
     @GetMapping("/{sku-code}")
     @ResponseStatus(HttpStatus.OK)
-    public boolean isInStock(@PathVariable("sku-code") String skuCode) {
+    public List<InventoryResponse> isInStock(@PathVariable("sku-code") List<String> skuCode) {
         return inventoryService.isInStock(skuCode);
     }
 }

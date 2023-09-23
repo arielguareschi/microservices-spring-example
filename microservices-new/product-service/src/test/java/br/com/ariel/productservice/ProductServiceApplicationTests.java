@@ -2,7 +2,6 @@ package br.com.ariel.productservice;
 
 import br.com.ariel.productservice.dto.ProductRequest;
 import br.com.ariel.productservice.repository.ProductRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
