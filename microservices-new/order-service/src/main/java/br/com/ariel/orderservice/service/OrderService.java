@@ -7,6 +7,8 @@ import br.com.ariel.orderservice.dto.OrderRequest;
 import br.com.ariel.orderservice.model.Order;
 import br.com.ariel.orderservice.model.OrderLineItems;
 import br.com.ariel.orderservice.repository.OrderRepository;
+import brave.Span;
+import brave.Tracer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,8 +25,9 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final WebClient.Builder webClientBuilder;
+    private final Tracer tracer;
 
-    public void placeOrder(OrderRequest orderRequest) {
+    public String placeOrder(OrderRequest orderRequest) {
         Order order = new Order();
         order.setOrderNumber(UUID.randomUUID().toString());
         List<OrderLineItems> orderLineItems = orderRequest.getOrderLineItemsDtoList().stream().map(this::mapToDto).toList();
@@ -32,22 +35,28 @@ public class OrderService {
 
         List<String> skuCodes = order.getOrderLineItemsList().stream().map(OrderLineItems::getSkuCode).toList();
 
+        Span inventoryServiceLookup = tracer.nextSpan().name("InventoryServiceLookup");
+        try(Tracer.SpanInScope spanInScope = tracer.withSpanInScope(inventoryServiceLookup.start())){
+            // chama o Intentory Service, a grava uma ordem se o produto esta em estoque
+            InventoryResponse[] inventoryResponseArray = webClientBuilder.build().get()
+                    .uri("http://inventory-service/api/inventory",
+                            uriBuilder -> uriBuilder.queryParam("skuCode", skuCodes).build())
+                    .retrieve()
+                    .bodyToMono(InventoryResponse[].class)
+                    .block();
 
-        // chama o Intentory Service, a grava uma ordem se o produto esta em estoque
-        InventoryResponse[] inventoryResponseArray = webClientBuilder.build().get()
-                .uri("http://inventory-service/api/inventory",
-                        uriBuilder -> uriBuilder.queryParam("skuCode", skuCodes).build())
-                .retrieve()
-                .bodyToMono(InventoryResponse[].class)
-                .block();
+            boolean allProductsInStock = Arrays.stream(inventoryResponseArray).allMatch(InventoryResponse::isInStock);
 
-        boolean allProductsInStock = Arrays.stream(inventoryResponseArray).allMatch(InventoryResponse::isInStock);
-
-        if (allProductsInStock){
-            orderRepository.save(order);
-        } else {
-            throw new IllegalArgumentException("Produto sem estoque tente depois!");
+            if (allProductsInStock){
+                orderRepository.save(order);
+                return "Ordem salva com sucesso!";
+            } else {
+                throw new IllegalArgumentException("Produto sem estoque tente depois!");
+            }
+        }finally {
+            inventoryServiceLookup.finish();
         }
+
 
     }
 
