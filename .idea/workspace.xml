@@ -28,7 +28,7 @@
   &quot;associatedIndex&quot;: 2
 }</component>
   <component name="ProjectId" id="2VTp4mfKImHBrPwhYXppeCWHc6r" />
-  <component name="ProjectLevelVcsManager">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
@@ -49,7 +49,7 @@
     "WebServerToolWindowFactoryState": "false",
     "ignore.virus.scanning.warn.message": "true",
     "jdk.selected.JAVA_MODULE": "19",
-    "last_opened_file_path": "D:/Fontes/TesteMicroServices",
+    "last_opened_file_path": "/home/ariel/Fontes/microservices-spring-example/microservices-new",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -104,6 +104,7 @@
       <updated>1694869735841</updated>
       <workItem from="1694869736843" duration="2718000" />
       <workItem from="1694872460087" duration="3101000" />
+      <workItem from="1697893066427" duration="21000" />
     </task>
     <task id="LOCAL-00001" summary="product">
       <option name="closed" value="true" />

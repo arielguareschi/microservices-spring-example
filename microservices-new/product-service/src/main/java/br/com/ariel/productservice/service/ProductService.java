@@ -15,12 +15,10 @@ import java.util.List;
 @Slf4j
 public class ProductService {
 
-
     private final ProductRepository productRepository;
 
-
-    public void createProduct(ProductRequest productRequest){
-        Product  product = Product.builder()
+    public void createProduct(ProductRequest productRequest) {
+        Product product = Product.builder()
                 .name(productRequest.getName())
                 .description(productRequest.getDescription())
                 .price(productRequest.getPrice())
@@ -33,10 +31,10 @@ public class ProductService {
     public List<ProductResponse> getAllProducts() {
         List<Product> products = productRepository.findAll();
 
-        return products.stream().map(this::mapToProductResponde).toList();
+        return products.stream().map(this::mapToProductResponse).toList();
     }
 
-    private ProductResponse mapToProductResponde(Product product) {
+    private ProductResponse mapToProductResponse(Product product) {
         return ProductResponse.builder()
                 .id(product.getId())
                 .name(product.getName())

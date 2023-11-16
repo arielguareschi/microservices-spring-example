@@ -1,4 +1,4 @@
-package br.com.ariel.discoveryserver.config;
+package br.com.ariel.discoveryserver;
 
 
 import org.springframework.context.annotation.Bean;
@@ -15,3 +15,4 @@ public class SecurityConfig {
         return httpSecurity.build();
     }
 }
+
